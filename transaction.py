@@ -186,6 +186,34 @@ def getNEnemy(user,floor):
 			)
 	return result
 
+def getAllEnemy(args):
+	query = f"SELECT name,hp,atk,def,satk,sdef,speed,power,poke_id,img FROM poke;"  
+	if args:
+		whereMatch = ""
+		for x in args:
+			whereMatch += f"{x[0]}='{x[1]}' and "  
+		whereMatch = whereMatch[:-5]
+		query = f"SELECT name,hp,atk,def,satk,sdef,speed,power,poke_id,img FROM poke where {whereMatch} COLLATE NOCASE;"
+		
+	temp = select(query)
+	result = list()
+	for x in temp:
+		result.append(
+				{
+					"poke_id" : x[8],
+					"name" : x[0],
+					"hp" : x[1],
+					"atk" : x[2],
+					"def" : x[3],
+					"satk" : x[4],
+					"sdef" : x[5],
+					"speed" : x[6],
+					"power" : x[7],
+					"img" : x[9]
+				}
+			)
+	return result
+
 def defeatEnemy(user):    
     query = f"SELECT a.poke_id FROM poke a LEFT JOIN state b on a.poke_id = b.poke_id WHERE a.power >= {rnge[int(floor)][0]} AND a.power <= {rnge[int(floor)][1]} AND b.user_id = {user} AND b.status IS NOT NULL;"
     enemy = select(query2)

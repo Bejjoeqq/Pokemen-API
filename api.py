@@ -1,6 +1,6 @@
 from flask import Flask,jsonify
-from flask_restful import Api, Resource
-from transaction import setLogin,getNChat,getUsers,getLeader,setNChat,setRegis,setNStardust,setNPokecoin,setNPokeball,setNDiamond,setNFloor,getNEnemy,updateWin,setNExp,setNAtt
+from flask_restful import Api, Resource, request
+from transaction import setLogin,getNChat,getUsers,getLeader,setNChat,setRegis,setNStardust,setNPokecoin,setNPokeball,setNDiamond,setNFloor,getNEnemy,updateWin,setNExp,setNAtt,getAllEnemy
 
 app = Flask(__name__)
 api = Api(app)
@@ -173,8 +173,13 @@ class setWin(Resource):
 		data = {"result":1}
 		return jsonify(**data)
 
+class getPoke(Resource):
+	def get(self):
+		result = getAllEnemy(list(request.args.items()))
+		data = {"result":result}
+		return jsonify(**data)
 
-
+api.add_resource(getPoke,"/poke/getPoke")
 api.add_resource(getAccount,"/poke/getAccount/<string:user>&<string:paswd>")
 api.add_resource(getChat,"/poke/getChat")
 api.add_resource(getVersion,"/poke/getVersion")
